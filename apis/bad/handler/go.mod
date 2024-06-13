@@ -1,4 +1,4 @@
-module github.com/kcalixto/tech-review-log-slog/apis/penguin_store/bad/handler
+module github.com/kcalixto/tech-review-log-slog/apis/bad/handler
 
 go 1.21
 

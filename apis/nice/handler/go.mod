@@ -1,4 +1,4 @@
-module github.com/kcalixto/tech-review-log-slog/apis/penguin_store/nice/handler
+module github.com/kcalixto/tech-review-log-slog/apis/nice/handler
 
 go 1.21
 

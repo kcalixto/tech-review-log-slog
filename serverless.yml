@@ -26,16 +26,6 @@ package:
     - ./bin/**
 
 functions:
-  bad-handler:
-    handler: bootstrap
-    package:
-      artifact: bin/bad-handler.zip
-    events:
-      - http:
-          path: /bad
-          method: GET
-          cors: true
-
   nice-handler:
     handler: bootstrap
     package:
@@ -43,5 +33,15 @@ functions:
     events:
       - http:
           path: /nice
+          method: GET
+          cors: true
+
+  bad-handler:
+    handler: bootstrap
+    package:
+      artifact: bin/bad-handler.zip
+    events:
+      - http:
+          path: /bad
           method: GET
           cors: true

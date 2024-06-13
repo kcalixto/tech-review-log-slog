@@ -6,9 +6,13 @@ build:
 	export GO111MODULE=on
 	export CGO_ENABLED=1
 
-	${GO_BUILD} -o bin/handler/bootstrap ./handler/main.go
-	chmod +x bin/handler/bootstrap
-	zip -j handler.zip bin/handler/bootstrap
+	${GO_BUILD} -o bin/nice-handler/bootstrap ./apis/nice/handler/main.go
+	chmod +x bin/nice-handler/bootstrap
+	zip -j bin/nice-handler.zip bin/nice-handler/bootstrap
+
+	${GO_BUILD} -o bin/bad-handler/bootstrap ./apis/bad/handler/main.go
+	chmod +x bin/bad-handler/bootstrap
+	zip -j bin/bad-handler.zip bin/bad-handler/bootstrap
 
 clean:
 	rm -rf ./bin

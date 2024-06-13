@@ -1,3 +1,3 @@
-module github.com/kcalixto/tech-review-log-slog/apis/penguin_store/nice/services
+module github.com/kcalixto/tech-review-log-slog/apis/nice/services
 
 go 1.21

@@ -1,8 +1,8 @@
 go 1.21
 
 use (
-	./apis/penguin_store/bad/handler
-	./apis/penguin_store/bad/service
-	./apis/penguin_store/nice/handler
-	./apis/penguin_store/nice/services
+	./apis/bad/handler
+	./apis/bad/service
+	./apis/nice/handler
+	./apis/nice/services
 )
