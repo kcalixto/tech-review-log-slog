@@ -1,11 +1,20 @@
 package main
 
 import (
+	"github.com/aws/aws-lambda-go/lambda"
 	"log/slog"
 	"os"
 )
 
 func main() {
+	if os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != "" {
+		lambda.Start(LogSlogExample)
+	} else {
+		LogSlogExample()
+	}
+}
+
+func LogSlogExample() error {
 	logger := slog.New(
 		slog.NewJSONHandler(
 			os.Stdout, // acho q da pra usar o datalake aqui ou fazer log em batch preencheno um buffer
@@ -35,6 +44,8 @@ func main() {
 	fn()
 	level()
 	withType()
+
+	return nil
 }
 
 func fn() {
