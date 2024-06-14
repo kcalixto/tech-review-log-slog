@@ -14,4 +14,4 @@ clean:
 	rm -rf ./bin
 
 deploy: clean build
-	sls deploy --verbose --stage $(STAGE)
+	sls deploy
