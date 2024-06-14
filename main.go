@@ -1,9 +1,13 @@
 package main
 
 import (
-	"github.com/aws/aws-lambda-go/lambda"
 	"log/slog"
+	"net/http"
 	"os"
+	"strings"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 func main() {
@@ -14,7 +18,7 @@ func main() {
 	}
 }
 
-func LogSlogExample() error {
+func LogSlogExample() (events.APIGatewayProxyResponse, error) {
 	logger := slog.New(
 		slog.NewJSONHandler(
 			os.Stdout, // acho q da pra usar o datalake aqui ou fazer log em batch preencheno um buffer
@@ -45,7 +49,9 @@ func LogSlogExample() error {
 	level()
 	withType()
 
-	return nil
+	return events.APIGatewayProxyResponse{
+		StatusCode: http.StatusOK,
+	}, nil
 }
 
 func fn() {
@@ -77,28 +83,47 @@ func level() {
 type MyType struct {
 	Name     string  `json:"name"`
 	Number   int     `json:"number"`
-	Status   bool    `json:"status"`
+	Flag     bool    `json:"flag"`
 	Floating float64 `json:"floating"`
+	Emoji    Emoji   `json:"emoji"`
 	Hidden   string  `json:"hidden"`
+}
+
+type Emoji struct {
+	emoji string
+}
+
+func (e Emoji) JustOneMore() (all string) {
+	return strings.Repeat(e.emoji, 5)
+}
+
+func NewSkullEmoji() Emoji {
+	return Emoji{emoji: "💀"}
+}
+
+func EmojiAttr(key string, emoji Emoji) slog.Attr {
+	return slog.String("emoji", emoji.JustOneMore())
 }
 
 func (m MyType) LogValue() slog.Value {
 	return slog.GroupValue(
 		slog.String("name", m.Name),
 		slog.Int("number", m.Number),
-		slog.Bool("status", m.Status),
+		slog.Bool("flag", m.Flag),
 		slog.Float64("floating", m.Floating),
+		EmojiAttr("emoji", m.Emoji),
 		slog.String("hidden", "*REDACTED*"), // that's interesting...
 	)
 }
 
 func withType() {
 	myType := MyType{
-		Name:     "Manuel Gomes",
+		Name:     "Ca Calixto lixto",
 		Number:   42,
-		Status:   true,
+		Flag:     true,
 		Floating: 3.14,
-		Hidden:   "should_be_hidden",
+		Emoji:    NewSkullEmoji(),
+		Hidden:   "his favorite number is 7 (but don't tell anyone)",
 	}
 
 	slog.Info("log custom type data", "my_type", myType)
