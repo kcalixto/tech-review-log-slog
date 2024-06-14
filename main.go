@@ -19,15 +19,15 @@ func main() {
 }
 
 func LogSlogExample() (events.APIGatewayProxyResponse, error) {
-	logger := NewTextHandler()
+	// logger := NewTextHandler()
 	// logger := NewJSONHandler()
-	// logger := NewJSONHandlerWithOptions()
-
-	// Levels
-	PrintLevels()
+	logger := NewJSONHandlerWithOptions()
 
 	// Set a logger variable to be used by the slog package
 	slog.SetDefault(logger)
+
+	// Levels
+	PrintLevels()
 
 	// Grouping
 	PrintWithInlineFields()
