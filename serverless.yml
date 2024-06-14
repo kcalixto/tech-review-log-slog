@@ -26,3 +26,51 @@ functions:
           path: /
           method: GET
           cors: true
+
+resources:
+  Resources:
+    ErrorMetric:
+      Type: AWS::Logs::MetricFilter
+      Properties:
+        FilterPattern: '{ ($.level = "ERROR") }'
+        LogGroupName: /aws/lambda/${self:service}-${self:provider.stage}-main
+        MetricTransformations:
+          - MetricValue: "1"
+            MetricNamespace: ${self:service}
+            MetricName: "API ERRORS"
+
+    Alarm:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmName: "Essa não!! A sua API está toda bagunçada! :("
+        TreatMissingData: notBreaching
+        Metrics:
+          - Id: invokes
+            ReturnData: false
+            MetricStat:
+              Metric:
+                MetricName: Invocations
+                Namespace: AWS/Lambda
+                Dimensions:
+                  - Name: FunctionName
+                    Value: ${self:service}-${self:provider.stage}-main
+              Period: 300 # 5 minutes
+              Stat: Sum
+          - Id: errors
+            ReturnData: false
+            MetricStat:
+              Metric:
+                MetricName: "API ERRORS"
+                Namespace: ${self:service}
+              Period: 300 # 5 minutes
+              Stat: Sum
+          - Id: e1
+            ReturnData: true
+            Expression: (errors*100)/invokes
+            Label: "Error Rate"
+        Threshold: 10 # 10% error rate
+        ComparisonOperator: GreaterThanOrEqualToThreshold
+        EvaluationPeriods: 1
+        DatapointsToAlarm: 1
+        # AlarmActions:
+        # - arn:aws:sns:sa-east-1:XXXX:XXXXX

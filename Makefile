@@ -6,7 +6,7 @@ build:
 	export GO111MODULE=on
 	export CGO_ENABLED=1
 
-	${GO_BUILD} -o bin/bootstrap ./main.go
+	${GO_BUILD} -o bin/bootstrap .
 	chmod +x bin/bootstrap
 	zip -j bin/main.zip bin/bootstrap
 
